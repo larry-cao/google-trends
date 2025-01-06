@@ -1,6 +1,7 @@
 import { Keyword } from '../types';
 
 const STORAGE_KEY = 'google_trends_keywords';
+const BASE_KEYWORD_KEY = 'google_trends_base_keyword';
 
 // 从 localStorage 获取数据
 function getStoredData(): Keyword[] {
@@ -23,6 +24,30 @@ function saveToStorage(keywords: Keyword[]) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(keywords));
   } catch (error) {
     console.error('Error saving to localStorage:', error);
+  }
+}
+
+// 获取基准关键词
+export function getBaseKeyword(): string {
+  if (typeof window === 'undefined') return 'gpts';
+  
+  try {
+    const stored = localStorage.getItem(BASE_KEYWORD_KEY);
+    return stored || 'gpts';
+  } catch (error) {
+    console.error('Error reading base keyword from localStorage:', error);
+    return 'gpts';
+  }
+}
+
+// 保存基准关键词
+export function saveBaseKeyword(keyword: string): void {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    localStorage.setItem(BASE_KEYWORD_KEY, keyword);
+  } catch (error) {
+    console.error('Error saving base keyword to localStorage:', error);
   }
 }
 
